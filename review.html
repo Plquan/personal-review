@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Nhân sự - More Stars</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. SETUP NỀN TRẮNG & BODY --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- 2. HIỆU ỨNG HÌNH TRÒN NỀN (Đã cập nhật cho số lượng nhiều) --- */
+        .star {
+            position: fixed; /* Sử dụng fixed để phủ kín màn hình bất kể scroll */
+            background: #cbd5e0;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            opacity: 0.5; /* Giảm độ mờ xuống một chút để nhiều sao nhưng không bị rối */
+            box-shadow: 0 0 4px #a0aec0;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8) translateY(0); }
+            50% { opacity: 0.6; transform: scale(1.2) translateY(-25px); } /* Tăng khoảng cách bay lên xíu */
+        }
+
+        /* --- 3. CSS CHO HẠT PHÁO HOA VẬT LÝ (Giữ nguyên) --- */
+        .firework-particle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            will-change: transform, opacity;
+        }
+
+        /* --- CONTAINER CHÍNH (Giữ nguyên) --- */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            width: 100%;
+            background: #ffffff;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            padding: 50px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Typography & Components (Style cũ) */
+        .header { text-align: center; border-bottom: 2px solid #f0f0f0; padding-bottom: 25px; margin-bottom: 40px; }
+        .header h1 { margin: 0; text-transform: uppercase; font-size: 28px; letter-spacing: 2px; color: #1a202c; background: linear-gradient(to right, #1a202c, #2d3748); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-title { background: #f7fafc; color: #2b6cb0; padding: 15px 20px; font-weight: 700; border-left: 5px solid #4299e1; margin-top: 40px; margin-bottom: 25px; font-size: 18px; border-radius: 0 8px 8px 0; }
+        .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        @media (max-width: 768px) { .skills-grid { grid-template-columns: 1fr; } }
+        .skill-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .skill-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(66, 153, 225, 0.15); border-color: #4299e1; }
+        .skill-name { font-size: 18px; font-weight: 700; margin-bottom: 5px; display: flex; justify-content: space-between; color: #2d3748; }
+        .category { font-size: 13px; color: #718096; font-style: italic; display: block; margin-bottom: 15px; }
+        .comment { font-size: 15px; color: #4a5568; text-align: justify; line-height: 1.7; }
+        .rating-badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; color: white;}
+        .rating-kha { background: linear-gradient(to right, #38a169, #48bb78); box-shadow: 0 2px 5px rgba(56, 161, 105, 0.3); }
+        .rating-tb { background: linear-gradient(to right, #d69e2e, #ecc94b); box-shadow: 0 2px 5px rgba(214, 158, 46, 0.3); color: #fff; }
+        .text-block { margin-bottom: 25px; background: #f8fafc; padding: 25px; border-radius: 12px; border: 1px solid #edf2f7;}
+        .text-block p, .text-block li { color: #4a5568; }
+        .label { font-weight: 700; color: #2b6cb0; display: block; margin-bottom: 10px; font-size: 16px; }
+        ul.colleagues-list { list-style: none; padding: 0; display: flex; gap: 15px; flex-wrap: wrap; }
+        ul.colleagues-list li { background: #fff; padding: 10px 25px; border-radius: 50px; border: 1px solid #e2e8f0; cursor: pointer; transition: 0.3s; color: #4a5568; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        ul.colleagues-list li:hover { background: #4299e1; color: #fff; transform: scale(1.05); border-color: transparent; box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Báo cáo Đánh giá Nhân viên</h1>
+    </div>
+    <div class="section-title">I. Đánh giá Năng lực & Kỹ năng</div>
+    <div class="skills-grid">
+        <div class="skill-card">
+            <div class="skill-name">1. Khả năng thích nghi <span class="rating-badge rating-kha">Khá</span></div>
+            <span class="category">Kỹ năng mềm</span>
+            <div class="comment">Nhân viên có khả năng thích nghi tốt với các thay đổi trong công việc và môi trường làm việc mới. Luôn sẵn sàng học hỏi và tiếp thu kiến thức mới.</div>
+        </div>
+        <div class="skill-card">
+            <div class="skill-name">2. Chất lượng công việc <span class="rating-badge rating-kha">Khá</span></div>
+            <span class="category">Kiến thức & Năng lực</span>
+            <div class="comment">Chất lượng công việc luôn được đảm bảo, hoàn thành tốt các nhiệm vụ được giao, có kiến thức chuyên môn vững chắc.</div>
+        </div>
+        <div class="skill-card">
+            <div class="skill-name">3. Trách nhiệm <span class="rating-badge rating-kha">Khá</span></div>
+            <span class="category">Thái độ</span>
+            <div class="comment">Có tinh thần trách nhiệm cao, luôn hoàn thành công việc đúng thời hạn và chịu trách nhiệm với kết quả công việc của mình.</div>
+        </div>
+        <div class="skill-card">
+            <div class="skill-name">4. Giao tiếp <span class="rating-badge rating-tb">Trung bình</span></div>
+            <span class="category">Kỹ năng nói/viết</span>
+            <div class="comment">Kỹ năng giao tiếp ở mức khá, có thể trình bày ý tưởng nhưng đôi khi chưa rõ ràng. Cần cải thiện khả năng diễn đạt và lắng nghe.</div>
+        </div>
+        <div class="skill-card">
+            <div class="skill-name">5. Đàm phán <span class="rating-badge rating-tb">Trung bình</span></div>
+            <span class="category">Kỹ năng mềm</span>
+            <div class="comment">Cần cải thiện kỹ năng đàm phán, đôi khi còn thiếu tự tin và chưa đạt được kết quả tối ưu.</div>
+        </div>
+        <div class="skill-card">
+            <div class="skill-name">6. Ngoại ngữ (Tiếng Anh) <span class="rating-badge rating-kha">Khá</span></div>
+            <span class="category">Ngôn ngữ</span>
+            <div class="comment">Có khả năng đọc hiểu và giao tiếp cơ bản bằng tiếng Anh. Cần luyện tập thêm để nâng cao khả năng nói và viết.</div>
+        </div>
+    </div>
+    <div class="section-title">II. Tổng kết & Kế hoạch phát triển</div>
+    <div class="text-block">
+        <span class="label">7. Tổng kết quá trình làm việc:</span>
+        <p>Trong tháng qua, tôi đã thể hiện sự nỗ lực và đóng góp tích cực vào các dự án của công ty. Hoàn thành tốt các nhiệm vụ được giao. Tuy nhiên, cần cải thiện thêm về kỹ năng để đạt hiệu quả cao hơn trong công việc.</p>
+    </div>
+    <div class="text-block">
+        <span class="label">8. Kế hoạch trong 6 tháng tới:</span>
+        <p>Trong 6 tháng tới, tôi sẽ tập trung vào việc nâng cao kỹ năng thông qua các khóa học và thực hành. Đồng thời, tiếp tục phát huy các điểm mạnh, đóng góp nhiều hơn vào các dự án trọng điểm.</p>
+    </div>
+    <div class="text-block">
+        <span class="label">9. Kết quả đạt được:</span>
+        <ul><li>Hoàn thành các mục tiêu công việc được giao.</li></ul>
+    </div>
+    <div class="text-block">
+        <span class="label">10. Nguyện vọng:</span>
+        <p>Tôi mong muốn được tham gia vào các dự án có tính thử thách cao hơn để phát triển bản thân.</p>
+    </div>
+    <div class="section-title">III. Đề xuất nhân sự phối hợp</div>
+    <div class="text-block" style="background:none; border:none; padding-left:0;">
+        <span class="label">3 người muốn làm việc cùng nhất:</span>
+        <ul class="colleagues-list">
+            <li>Trần Long</li>
+            <li>Phạm Quân</li>
+            <li>Hà Lê</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // 1. TẠO HÌNH TRÒN NỀN (ĐÃ TĂNG SỐ LƯỢNG)
+    function createAmbientStars() {
+        const body = document.body;
+        // Đã tăng từ 40 lên 200 để "nhiều chút" như yêu cầu
+        const starCount = 200; 
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            // Sử dụng innerWidth/Height để rải đều khắp màn hình
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            // Kích thước ngẫu nhiên từ 1px đến 4px
+            const size = Math.random() * 3 + 1;
+            // Thời gian bay ngẫu nhiên từ 4s đến 10s cho nó chậm rãi
+            const duration = Math.random() * 6 + 4;
+
+            star.style.left = `${x}px`;
+            star.style.top = `${y}px`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${duration}s`);
+            body.appendChild(star);
+        }
+    }
+    createAmbientStars();
+
+    // 2. HỆ THỐNG PHÁO HOA VẬT LÝ (Giữ nguyên click là nổ)
+    const particles = [];
+    const GRAVITY = 0.05;
+    const FRICTION = 0.98;
+    const colors = ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#9400d3', '#FF1493', '#00CED1'];
+
+    document.addEventListener('click', (e) => {
+        explode(e.clientX, e.clientY);
+    });
+
+    function explode(x, y) {
+        const particleCount = 60;
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle(x, y));
+        }
+    }
+
+    class Particle {
+        constructor(x, y) {
+            this.element = document.createElement('div');
+            this.element.classList.add('firework-particle');
+            document.body.appendChild(this.element);
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            this.element.style.backgroundColor = color;
+            this.element.style.boxShadow = `0 0 6px 1px ${color}`;
+            const size = Math.random() * 5 + 3;
+            this.element.style.width = `${size}px`;
+            this.element.style.height = `${size}px`;
+            this.x = x;
+            this.y = y;
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 7 + 3;
+            this.vx = Math.cos(angle) * speed;
+            this.vy = Math.sin(angle) * speed;
+            this.life = 1;
+            this.decay = Math.random() * 0.015 + 0.01;
+        }
+        update() {
+            this.vy += GRAVITY;
+            this.vx *= FRICTION;
+            this.vy *= FRICTION;
+            this.x += this.vx;
+            this.y += this.vy;
+            this.life -= this.decay;
+            this.element.style.transform = `translate(${this.x}px, ${this.y}px) scale(${this.life})`;
+            this.element.style.opacity = this.life;
+        }
+    }
+
+    function animate() {
+        for (let i = particles.length - 1; i >= 0; i--) {
+            particles[i].update();
+            if (particles[i].life <= 0) {
+                particles[i].element.remove();
+                particles.splice(i, 1);
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+    animate();
+</script>
+
+</body>
+</html>
